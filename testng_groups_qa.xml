@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <test verbose="2" preserve-order="true" name="C:/Users/teju3/IdeaProjects/ATB7xAPIAutomationPrograms">
+        <groups>
+            <run>
+                <include name="qa"></include>
+                <exclude name="sanity"></exclude>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.akash.dhembare2000.ex_21092024.testngexamples.Test006">
+            </class>
+        </classes>
+    </test>
+</suite>
