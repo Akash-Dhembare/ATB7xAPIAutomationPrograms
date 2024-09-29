@@ -4,6 +4,12 @@
     <test verbose="2" preserve-order="true" name="C:/Users/teju3/IdeaProjects/ATB7xAPIAutomationPrograms">
         <classes>
             <class name="com.akash.dhembare2000.ex_21092024.testngexamples.CRUD.TestCaseIntegration">
+                <methods>
+                    <include name="test_update_request_put"></include>
+                    <include name="test_update_request_get"></include>
+                    <include name="test_delete_booking"></include>
+                    <include name="test_after_delete_request_get"></include>
+                </methods>
             </class>
         </classes>
     </test>

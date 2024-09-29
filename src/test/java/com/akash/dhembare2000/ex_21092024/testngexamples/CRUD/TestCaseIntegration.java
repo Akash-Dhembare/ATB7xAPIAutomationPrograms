@@ -77,27 +77,105 @@ public class TestCaseIntegration {
         validatableResponse = response.then().log().all();
         validatableResponse.statusCode(200);
 
-        bookingID =  response.jsonPath().getString("bookingid")
+        bookingID =  response.jsonPath().getString("bookingid");
+        System.out.println(bookingID);
         return bookingID;
     }
 
+    //@Test(priority = 1)
     @Test
+    //public void test_01_update_request_put(){
     public void test_update_request_put(){
+        token = getToken();
+        bookingID = getBookingID();
+
+        String payloadPUT= "{\n" +
+                "    \"firstname\" : \"Anshul\",\n" +
+                "    \"lastname\" : \"Jitendra\",\n" +
+                "    \"totalprice\" : 111,\n" +
+                "    \"depositpaid\" : false,\n" +
+                "    \"bookingdates\" : {\n" +
+                "        \"checkin\" : \"2024-01-01\",\n" +
+                "        \"checkout\" : \"2024-01-01\"\n" +
+                "    },\n" +
+                "    \"additionalneeds\" : \"Lunch\"\n" +
+                "}";
+
+
+        requestSpecification = RestAssured.given();
+        requestSpecification.baseUri("https://restful-booker.herokuapp.com/");
+        requestSpecification.basePath("/booking/"+bookingID);
+        requestSpecification.contentType(ContentType.JSON);
+        requestSpecification.cookie("token",token);
+        requestSpecification.body(payloadPUT).log().all();
+
+        Response response = requestSpecification.when().put();
+
+
+        // Get Validatable response to perform validation
+        validatableResponse = response.then().log().all();
+        validatableResponse.statusCode(200);
 
     }
 
+   // @Test(priority = 2)
+   // @Test(dependsOnMethods = "test_update_request_put")
     @Test
+   // public void test_02_update_request_get(){
     public void test_update_request_get(){
 
+        requestSpecification = RestAssured.given();
+        requestSpecification.baseUri("https://restful-booker.herokuapp.com/");
+        requestSpecification.basePath("/booking/"+bookingID);
+        requestSpecification.contentType(ContentType.JSON);
+        requestSpecification.cookie("token",token);
+        Response response = requestSpecification.when().get();
+
+
+        // Get Validatable response to perform validation
+        validatableResponse = response.then().log().all();
+        validatableResponse.statusCode(200);
+        System.out.println(bookingID);
     }
 
+    //@Test(priority = 3)
     @Test
+   // @Test(dependsOnMethods = "test_update_request_get")
+    //public void test_03_delete_booking(){
     public void test_delete_booking(){
 
+        requestSpecification = RestAssured.given();
+        requestSpecification.baseUri("https://restful-booker.herokuapp.com/");
+        requestSpecification.basePath("/booking/"+bookingID);
+        requestSpecification.contentType(ContentType.JSON);
+        requestSpecification.cookie("token",token);
+        Response response = requestSpecification.when().delete();
+
+
+        // Get Validatable response to perform validation
+        validatableResponse = response.then().log().all();
+        validatableResponse.statusCode(201);
+        System.out.println(bookingID);
+        System.out.println(token);
     }
 
-    @Test
-    public void test_after_delete_request_get(){
 
+   // @Test(priority = 4)
+    @Test
+   // @Test(dependsOnMethods = "test_delete_booking")
+    //public void test_04_after_delete_request_get(){
+    public void test_after_delete_request_get(){
+        requestSpecification = RestAssured.given();
+        requestSpecification.baseUri("https://restful-booker.herokuapp.com/");
+        requestSpecification.basePath("/booking/"+bookingID);
+        requestSpecification.contentType(ContentType.JSON);
+        requestSpecification.cookie("token",token);
+        Response response = requestSpecification.when().get();
+
+
+        // Get Validatable response to perform validation
+        validatableResponse = response.then().log().all();
+        validatableResponse.statusCode(404);
+        System.out.println(bookingID);
     }
 }
