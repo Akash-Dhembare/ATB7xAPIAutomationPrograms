@@ -5,8 +5,14 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
+import org.hamcrest.Matchers;
+import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+
+
+import static org.assertj.core.api.Assertions.*;
+
 
 public class TestCaseIntegration {
 
@@ -116,6 +122,18 @@ public class TestCaseIntegration {
         validatableResponse = response.then().log().all();
         validatableResponse.statusCode(200);
 
+
+        //AssertJ Assertions
+        String firstname = response.then().extract().path("firstname");
+        String  lastname = response.then().extract().path("lastname");
+        String  checkin = response.then().extract().path("bookingdates.checkin");
+        String  checkout = response.then().extract().path("bookingdates.checkin");
+
+        assertThat(firstname).isEqualTo("Anshul").isNotEmpty().isNotBlank();
+        assertThat(lastname).isEqualTo("Jitendra").isNotEmpty().isNotBlank();
+        assertThat(checkin).isNotEmpty();
+        assertThat(checkout).isNotEmpty();
+
     }
 
    // @Test(priority = 2)
@@ -133,9 +151,22 @@ public class TestCaseIntegration {
 
 
         // Get Validatable response to perform validation
+
         validatableResponse = response.then().log().all();
         validatableResponse.statusCode(200);
         System.out.println(bookingID);
+
+        // HardAssert : This means that if any assertion fails, the remaining statements in that test method will not be executed.
+
+        String firstname_HA=response.then().extract().path("firstname");
+        String lastname_HA=response.then().extract().path("lastname");
+
+
+        Assert.assertEquals(firstname_HA, "Anshul");
+        Assert.assertEquals(lastname_HA, "Jitendra");
+
+
+
     }
 
     //@Test(priority = 3)
@@ -157,6 +188,8 @@ public class TestCaseIntegration {
         validatableResponse.statusCode(201);
         System.out.println(bookingID);
         System.out.println(token);
+
+
     }
 
 
@@ -177,5 +210,14 @@ public class TestCaseIntegration {
         validatableResponse = response.then().log().all();
         validatableResponse.statusCode(404);
         System.out.println(bookingID);
+
+        // 1. RestAssured Default - Hamcrest
+
+//        validatableResponse.body("booking.firstname",Matchers.equalTo("Akash"));
+//        validatableResponse.body("booking.lastname",Matchers.equalTo("Dhembare"));
+//        validatableResponse.body("booking.depositpaid",Matchers.equalTo(true));
+        validatableResponse.statusCode(404);
+
+
     }
 }
